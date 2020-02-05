@@ -1,4 +1,4 @@
-# deep-learning-2019
+# Deep Learning 2019
 Introduction to Deep Learning slides, used at University of Padua on 24 May 2019
 
 ## References
