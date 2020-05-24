@@ -2,16 +2,48 @@
 title: "MNIST caso di studio"
 author: "Alessandro Aere"
 date: "22 maggio 2020"
-output: html_document
+output: rmarkdown::html_vignette
 ---
 
-```{r, echo=FALSE}
+# Caso di studio: classificazione di immagini
+
+## Descrizione del problema
+
+Verrà effettuato un confronto di modelli utilizzando il dataset MNIST, una raccolta di immagini rappresentanti cifre scritte a mano.
+
+  * Lo scopo è classificare la cifra rappresentata (classificazione multinomiale a 10 classi).
+  * L'insieme di stima è composto da $21 000$ osservazioni (immagini).
+  * Verrà calcolata l'accuratezza nell'insieme di verifica, composto da $10 500$ osservazioni.
+  
+![*Esempio di immagini del dataset*](img/mnist.png)
+  
+Per maggiori dettagli riguardo i dati, consultare questo [link](http://yann.lecun.com/exdb/mnist/).
+
+In questo report verrà riportato solamente il codice riguardante le reti neurali, e non quello di tutti gli altri modelli statistici, in quanto non sono argomento di interesse. Nelle conclusioni potrete trovare, tuttavia, il confronto dei risultati.
+
+## Caricamento della libreria Keras
+
+```{r, results="hide", message=FALSE}
+devtools::install_github("rstudio/keras")
 library(keras)
 install_keras()
-use_session_with_seed(28)
+```
+
+Eseguite il codice qui in seguito, se desiderate impostare in *seed* ed ottenere risultati riproducibili.
+
+```{r}
+library(reticulate)
+py_run_string("import numpy as np;
+import tensorflow as tf;
+import random as python_random;
+np.random.seed(123);
+python_random.seed(123);
+tf.random.set_seed(123);")
 ```
 
 ## Caricamento dei dati
+
+I dati verranno scaricati automaticamente con i seguenti comandi, disponibili grazie alla libreria `keras`.
 
 ```{r}
 mnist <- dataset_mnist()
@@ -40,9 +72,10 @@ test_labels <- to_categorical(test_labels)
 ## Deep Neural Network
 
 Specificare l'architettura della rete neurale:
-* le immagini hanno una dimensione di $28\times28\times1$, ma la *feed-forward neural neutwork* prende in input solamente vettori unidimensionali; i pixel dell'immagine di input vengono quindi concatenati in un unico vettore di dimensione $784$;
-* vengono utilizzati 3 strati latenti di dimensione $256$, $128$, $64$ rispettivamente;
-* viene utilizzata la funzione *ReLU* come funzione di attivazione negli strati latenti, e la funzione *softmax* nello strato di output. 
+
+  * le immagini hanno una dimensione di $28\times28\times1$, ma la *feed-forward neural neutwork* prende in input solamente vettori unidimensionali; i pixel dell'immagine di input vengono quindi concatenati in un unico vettore di dimensione $784$;
+  * vengono utilizzati 3 strati latenti di dimensione $256$, $128$, $64$ rispettivamente;
+  * viene utilizzata la funzione *ReLU* come funzione di attivazione negli strati latenti, e la funzione *softmax* nello strato di output. 
 
 ```{r, warning=FALSE}
 model <- keras_model_sequential() %>%
@@ -55,8 +88,9 @@ model
 ```
 
 Compilare il modello:
-* l'ottimizzatore utilizzato è `adam`, con un *learning rate* pari a $0.001$;
-* viene utilizzata la *cross-entropia* come funzione di perdita, e l'*accuratezza* come metrica di valutazione.
+
+  * l'ottimizzatore utilizzato è `adam`, con un *learning rate* pari a $0.001$;
+  * viene utilizzata la *cross-entropia* come funzione di perdita, e l'*accuratezza* come metrica di valutazione.
 
 ```{r}
 model %>% compile(
@@ -68,7 +102,7 @@ model %>% compile(
 
 Training della rete neurale.
 
-```{r, message=FALSE, cache=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 history <- model %>% fit(
   x = array_reshape(train_images, c(60000, 28 * 28)), 
   y = train_labels, 
@@ -81,7 +115,7 @@ history <- model %>% fit(
 
 In seguito viene rappresentato il grafico della funzione di perdita e dell'accuratezza in funzione del numero di epoche.
 
-```{r, message=FALSE}
+```{r, fig.height=5, fig.width=7, out.width='100%', message=FALSE}
 plot(history)
 ```
 
@@ -98,12 +132,13 @@ print(paste("Loss on test data:", results["loss"]))
 print(paste("Accuracy on test data:", results["accuracy"]))
 ```
 
-# Convolutional neural network
+## Convolutional neural network
 
 Specificare l'architettura della rete neurale:
-* nella parte convoluzionale viene utilizzata una sequenza di layer di tipo `conv`->`pool`->`conv`->`pool`->`conv`;
-* nella parte *fully-connected* viene utilizzato uno strato latente di dimensione $64$;
-* viene utilizzata la funzione *ReLU* come funzione di attivazione negli strati latenti, e la funzione *softmax* nello strato di output.
+
+  * nella parte convoluzionale viene utilizzata una sequenza di layer di tipo `conv`->`pool`->`conv`->`pool`->`conv`;
+  * nella parte *fully-connected* viene utilizzato uno strato latente di dimensione $64$;
+  * viene utilizzata la funzione *ReLU* come funzione di attivazione negli strati latenti, e la funzione *softmax* nello strato di output.
 
 ```{r}
 model <- keras_model_sequential() %>%
@@ -120,8 +155,9 @@ model
 ```
 
 Compilare il modello:
-* l'ottimizzatore utilizzato è `adam`, con un *learning rate* pari a $0.001$;
-* viene utilizzata la *cross-entropia* come funzione di perdita, e l'*accuratezza* come metrica di valutazione.
+
+  * l'ottimizzatore utilizzato è `adam`, con un *learning rate* pari a $0.001$;
+  * viene utilizzata la *cross-entropia* come funzione di perdita, e l'*accuratezza* come metrica di valutazione.
 
 ```{r}
 model %>% compile(
@@ -146,7 +182,7 @@ history <- model %>% fit(
 
 In seguito viene rappresentato il grafico della funzione di perdita e dell'accuratezza in funzione del numero di epoche.
 
-```{r, message=FALSE}
+```{r, fig.height=5, fig.width=7, out.width='100%', message=FALSE}
 plot(history)
 ```
 
@@ -162,3 +198,15 @@ results <- model %>% evaluate(
 print(paste("Loss on test data:", results["loss"]))
 print(paste("Accuracy on test data:", results["accuracy"]))
 ```
+
+## Risultati
+
+| **Modello**                  | **Accuratezza** |
+|------------------------------|-----------------|
+| Convolutional neural network | 99.2%           |
+| Deep neural network          | 97.9%           |
+| Support vector machine       | 97.6%           |
+| Gradient boosting            | 97.1%           |
+| K-nearest neighbours         | 96.3%           |
+| Random forest                | 96.1%           |
+| Albero di classificazione    | 87.6%           |
