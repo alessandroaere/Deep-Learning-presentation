@@ -13,7 +13,7 @@ Verrà effettuato un confronto di modelli utilizzando il dataset IMDB, una racco
 
   * Lo scopo è determinare se una recensione è positiva o negativa (classificazione binomiale).
   * L'insieme di stima è composto da $25 000$ osservazioni (recensioni).
-  * Ci sono $10 000$ variabili esplicative e rappresentano le parole presenti nell'articolo; ogni variabile indica la presenza o assenza di una determinata parola. (eccetto recurrent neural network)
+  * Ci sono $5 000$ variabili esplicative e rappresentano le parole presenti nell'articolo; ogni variabile indica la presenza o assenza di una determinata parola. (eccetto recurrent neural network)
   * Verrà calcolata l'accuratezza nell'insieme di verifica, composto da $25 000$ osservazioni.
   
 Per maggiori dettagli riguardo i dati, consultare questo [link](https://ai.stanford.edu/~amaas/data/sentiment/).
