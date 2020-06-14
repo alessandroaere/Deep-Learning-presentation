@@ -9,6 +9,7 @@ Into this repository, there are 2 case studies for a beginning approach to the d
 The analyses are implemented in `R` programming language, using the `keras` library.
 
 For each case study, you can find:
+* An `R markdown` notebook, in *english* language
 * An `R markdown` notebook, in *italian* language
 * An `R` script, with just the code
 
