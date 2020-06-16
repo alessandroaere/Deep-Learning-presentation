@@ -16,7 +16,7 @@ A comparison of models will be presented using the IMDB dataset, a collection of
    * There are $5 000$ explanatory variables, which represent the words in the article; each variable indicates the presence or absence of a specific word (except for the recurrent neural network).
    * The *accuracy* will be calculated in the validation set, which has $ 25,000 $ observations.
   
-More details regarding the datasets [here] (https://ai.stanford.edu/~amaas/data/sentiment/).
+More details regarding the datasets [here](https://ai.stanford.edu/~amaas/data/sentiment/).
 
 In this report only the code concerning neural networks will be reported, not that of all the other statistical models, as they are not a topic of interest. In the conclusion you will find, however, the comparison of the results.
 
@@ -145,6 +145,8 @@ Specify the neural network's architecture:
 
    * The first layer is an *embedding* layer, which transforms each word into a vector of size $128$
    * The second layer is an **LSTM** layer, an enhanced version of the recurrent layer.
+
+![*Neural network architecture example composed of a word embedding layer and an LSTM layer.*](img/lstm.png){width=480px, height=432px}
 
 ```{r, message=FALSE, warning=FALSE}
 model <- keras_model_sequential() %>%

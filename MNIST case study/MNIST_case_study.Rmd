@@ -17,7 +17,7 @@ A comparison of models will be made using the MNIST dataset, a collection of ima
   
 ![*Sample of the dataset*](img/mnist.png)
   
-More details of the datasets [here] (http://yann.lecun.com/exdb/mnist/).
+More details of the datasets [here](http://yann.lecun.com/exdb/mnist/).
 
 In this report only the code concerning neural networks will be reported, not that of all the other statistical models, as they are not a topic of interest. In the conclusion you will find, however, the comparison of the results.
 

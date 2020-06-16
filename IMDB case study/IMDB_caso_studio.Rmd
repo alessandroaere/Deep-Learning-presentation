@@ -145,6 +145,9 @@ Specificare l'architettura della rete neurale:
 
   * Il primo strato è un layer di *embedding*, con il quale ogni parola viene trasformata in un vettore di dimensione pari a $128$
   * Il secondo strato è un layer **LSTM**, una versione potenziata del layer ricorrente.
+  
+![*Esempio di architettura di rete neurale composta da uno strato di word embedding ed uno strato LSTM.*](img/lstm.png){width=480px, height=432px}
+
 
 ```{r, message=FALSE, warning=FALSE}
 model <- keras_model_sequential() %>%
